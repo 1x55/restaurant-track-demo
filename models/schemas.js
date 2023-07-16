@@ -17,7 +17,7 @@ let userSchema = new mongoose.Schema({
 //export both schemas as a single object, so we only need to go to object and grab the schema we want everytime we want to ref. a schema
 let menu = mongoose.model('menu', menuSchema, 'menu');
 let users = mongoose.model('users', menuSchema, 'users');
-let mySchemsa = {
+let mySchemas = {
     "menu" : menu,
     'users' : users
 }
