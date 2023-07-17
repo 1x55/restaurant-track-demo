@@ -7,7 +7,7 @@ module.exports = {
     editMenu: async(req,res) => {
         let sesh = req.session
   
-        if (!sesh.loggIn) { 
+        if (!sesh.loggedIn) { 
             res.render ('menu', {title: 'Edit', loggedIn: false, error: "Invalid Request"})
         } else {
             let id = req.params.id
@@ -25,5 +25,46 @@ module.exports = {
                 res.render ('menu', {title: 'Edit Menu', loggedIn: sesh.loggedIn , error: err})
             })
         }
+    },
+    deleteMenu: async (req,res) => {
+    let sesh = req.session  
+
+    if (!sesh.loggedIn) {
+        res.redirect('/login')
+    } else {
+        let menu = schemas.menu
+        let menuId = req.params.id
+        let qry = {_id:id}
+        let deleteResult = await menu.deleteOne(qry)
+        res.redirect('/') 
+
     }
+  },
+
+  saveMenu: async (req, res) => {
+
+    let sesh = req.session  
+
+    if (!sesh.loggedIn) {
+        res.redirect('/login')
+    } else {
+        let menuID  = req.body.menuId
+        let menuName = req.body.menuName
+        let menuIcon = req.body.menuIcon
+        let menuUrl = req.body.menuUrl
+        let menu = schemas.menu
+
+        let qry = {_id:menuId}
+
+        let saveData = {
+            $set : {
+                name: menuName,
+                icon: menuIcon,
+                menuUrl: menuUrl
+            }
+        }
+        let updateResult = await menu.updateOne(qry, saveData)
+        res.redirect('/')
+    }
+  },
 }
