@@ -43,4 +43,25 @@ exports.postLogin = async (req, res) => {
     } else {
         res.render('login', {title: 'Login', loggedIn: false, error:null})
     }
+
+    exports.postSignup = async (req, res) => {
+        let email = req.body.emailInput
+        let pass = req.bodypwdInput
+
+        if(email !== '' && pass !== '' ){ 
+            let users= schemas.users
+            let qry = {email:email}
+
+            let userSearch = . await users.findOne(qry)
+            .then(async(data) => {
+                 if(!data) {
+                    let saltRounds = 10
+                    let passSalt = await bcrypt.genSalt(saltRounds, async(err, salt) => {
+                        let passHash = await bcrypt.hash(pass, salt, async(err, hash) => {
+                            let acct = {email:email, pwd: hash, level:'admin'}
+                            let newUser = new schemas.users(acct)
+                            let saveUser = await newUser.save()                        })
+                    })
+                 }
+            })
 }
